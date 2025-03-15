@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
+// json-server --port 9999 --watch db.json
 export default function Create() {
   const router = useRouter();
   return (
@@ -22,7 +22,8 @@ export default function Create() {
           .then((result) => {
             console.log(result);
             const lastId = result.id;
-            router.push(`read/${lastId}`);
+            router.refresh();
+            router.push(`read/${lastId}`); // 바로 이동하게 하기
           });
       }}
     >

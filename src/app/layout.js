@@ -1,6 +1,8 @@
 import Link from "next/link";
 import "./globals.css";
 import axios from "axios";
+import Create from "./create/page";
+import { Control } from "./control";
 
 export const metadata = {
   title: "Create Next App",
@@ -9,9 +11,13 @@ export const metadata = {
 
 async function getTopics() {
   try {
-    const { data } = await axios.get("http://localhost:9999/topics", {
-      headers: { "Content-Type": "application/json" },
-    });
+    const { data } = await axios.get(
+      "http://localhost:9999/topics",
+      { next: { revalidate: 10 } }, // 10초 동안만 캐시를 유지하고 지나면 다시
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     return data;
   } catch (err) {
     console.error(err);
@@ -43,17 +49,7 @@ export default async function RootLayout({ children }) {
           </li>
         </ol>
         {children}
-        <ul>
-          <li>
-            <Link href="/create">Create</Link>
-          </li>
-          <li>
-            <Link href="/update/1">Update</Link>
-          </li>
-          <li>
-            <input type="button" value="Delete" />
-          </li>
-        </ul>
+        <Control />
       </body>
     </html>
   );
