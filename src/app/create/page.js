@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// json-server --port 9999 --watch db.json
+// npx json-server --port 9999 --watch db.json
 export default function Create() {
   const router = useRouter();
   return (

@@ -2,41 +2,45 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-// json-server --port 9999 --watch db.json
+
 export default function Update() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const router = useRouter();
   const params = useParams();
   const id = params.id;
+
   useEffect(() => {
-    fetch("http://localhost:9999/topics/" + id)
+    if (!id) return;
+    fetch(`http://localhost:9999/topics/${id}`)
       .then((resp) => resp.json())
       .then((result) => {
         setTitle(result.title);
         setBody(result.body);
       });
-  }, []);
+  }, [id]);
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        const title = e.target.title.value;
-        const body = e.target.body.value;
+
+        const updatedTitle = title;
+        const updatedBody = body;
+
         const options = {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title, body }),
+          body: JSON.stringify({ title: updatedTitle, body: updatedBody }),
         };
-        fetch(`http://localhost:9999/topics` + id, options)
+
+        fetch(`http://localhost:9999/topics/${id}`, options)
           .then((res) => res.json())
           .then((result) => {
             console.log(result);
-            const lastId = result.id;
-            router.refresh();
-            router.push(`read/${lastId}`); // 바로 이동하게 하기
+            router.replace(`/read/${result.id}`);
           });
       }}
     >
@@ -58,7 +62,7 @@ export default function Update() {
         ></textarea>
       </p>
       <p>
-        <input type="submit" value="create" />
+        <input type="submit" value="update" />
       </p>
     </form>
   );

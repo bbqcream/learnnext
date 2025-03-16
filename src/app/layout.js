@@ -1,7 +1,6 @@
 import Link from "next/link";
 import "./globals.css";
 import axios from "axios";
-import Create from "./create/page";
 import { Control } from "./control";
 
 export const metadata = {
@@ -41,12 +40,6 @@ export default async function RootLayout({ children }) {
               <Link href={`/read/${topic.id}`}>{topic.title}</Link>
             </li>
           ))}
-          <li>
-            <Link href="/read/1">html</Link>
-          </li>
-          <li>
-            <Link href="/read/2">css</Link>
-          </li>
         </ol>
         {children}
         <Control />
